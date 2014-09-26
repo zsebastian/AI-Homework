@@ -23,17 +23,18 @@ Decision CodeBlock::evaluate(Maze& maze, Coord current_coord, Decision current_d
 
 Node::ptr CodeBlock::select_node(Randomizer& random)
 {
-	//Only select self if there are no children.
-	if (children_.size() == 0)
+	//select a child at random                                                                                                     
+	int index = random.NextInt(0, children_.size());
+
+	//Only select self if there are no children or once in every lenght of child.
+	if (index == 0 || children_.size() == 0)
 	{
 		return get_this();
 	}
 
-	//select a child at random                                                                                                     
-	int index = random.NextInt(0, children_.size() - 1);
-	Node::ptr s = children_[index];
+	Node::ptr s = children_[index - 1];
 	//select that child half the time, select a childs child half the time.
-	if (random.NextInt(0, 1) == 0)
+	if (random.NextInt(0, 2) == 0)
 	{
 		return s;
 	}
@@ -53,15 +54,25 @@ Node::ptr CodeBlock::clone()
 	return std::move(copy);
 }
 
-void CodeBlock::mutate(Randomizer& random)
+void CodeBlock::mutate(Randomizer& random, int depth)
 {
 	int size = children_.size();
 	if (size != 0)
 	{
-		auto rand = std::bind(static_cast<int(Randomizer::*)(int, int)>(&Randomizer::NextInt), &random, 0, size - 1);
+		int size_change = random.NextInt(-2 - (2 - children_.size()), 2 - (2 - children_.size()));
+
+		auto rand = [this, &random, size](int i){return random.NextInt(0, i - 1); };
+		
 		//shuffle nodes
-		std::random_shuffle(children_.begin(), children_.end(), rand);
-		int rem = rand(0, size);
+		try
+		{
+			std::random_shuffle(children_.begin(), children_.end(), rand);
+		}
+		catch (...)
+		{
+			throw;
+		}
+		int rem = std::min(static_cast<int>(children_.size()), std::max(0, rand(size) + size_change));
 		//erase a random amount of nodes
 		children_.erase(children_.begin() + rem, children_.end());
 		//mutate some of the remaining children
@@ -73,25 +84,39 @@ void CodeBlock::mutate(Randomizer& random)
 				{
 					child = Node::make_random(random);
 				}
-				child->mutate(random);
+				
+				if (depth > 0)
+				{
+					child->mutate(random, depth - 1);
+				}
 			}
 		}
 		//add a random amount of nodes, such that on average there are as many
 		//nodes left as there were nodes to start with.
-		for (int i = 0; i < rand(0, size); ++i)
+		for (int i = 0; i < rand(size) + size_change; ++i)
 		{
 			Node::ptr c = Node::make_random(random);
-			c->mutate(random);
+			if (depth > 0)
+			{
+				c->mutate(random, depth - 1);
+			}
 			children_.push_back(c);
 		}
 	
 	}
 	else
 	{
-		//if no nodes, just add a random node.
-		Node::ptr c = Node::make_random(random);
-		c->mutate(random);
-		children_.push_back(c);
+		int size = random.NextInt(0, 2);
+		for (int i = 0; i < size; ++i)
+		{
+			//if no nodes, just add a random node.
+			Node::ptr c = Node::make_random(random);
+			if (depth > 0)
+			{
+				c->mutate(random, depth - 1);
+			}
+			children_.push_back(c);
+		}
 	}
 }
 
@@ -110,4 +135,22 @@ void CodeBlock::replace(Node::ptr& from, Node::ptr& to)
 			c->replace(from, to);
 		}
 	}
+}
+
+void CodeBlock::format(Formatter& format)
+{
+	for (Node::ptr& n : children_)
+	{
+		n->format(format);
+	}
+}
+
+int CodeBlock::max_depth()
+{
+	int max = 0;
+	for (Node::ptr& n : children_)
+	{
+		max = std::max(n->max_depth(), max);
+	}
+	return max + 1;
 }

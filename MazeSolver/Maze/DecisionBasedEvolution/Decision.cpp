@@ -27,6 +27,7 @@ Coord Decision::forward(Coord coord)
 		return Coord(coord.x - 1, coord.y);
 		break;
 	default:
+		return coord;
 		break;
 	}
 }

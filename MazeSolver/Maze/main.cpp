@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 	Randomizer rand(rd());
 
 	Coord start, end;
-	Maze maze(100, 100);
+	Maze maze(11, 11);
 	PrimGenerator generator(RandomCoord(rand, maze));
 
 	start = RandomCoord(rand, maze);
@@ -33,7 +33,8 @@ int main(int argc, char *argv[])
 	while (start == end)
 		end = RandomCoord(rand, maze);
 
-	DecisionEvolver solver(start, end, 420, 10, 0.5f, 0.01f, 0.50f);
+	DecisionEvolver solver(start, end, maze.Width() * maze.Height(), 100, 0.5f, 0.01f);
+	//Astar solver(start, end);
 
 	while (win.Open())
 	{
@@ -45,19 +46,23 @@ int main(int argc, char *argv[])
 		{
 			if (!solver.Step(maze))
 			{
+				std::cout << "SOLVED!" << std::endl;
+				maze = Maze(maze.Width() + 2, maze.Height() + 2);
+				generator.Reset(maze, RandomCoord(rand, maze));
+				
 				start = RandomCoord(rand, maze);
 				end = RandomCoord(rand, maze);
 				while (end == start)
 				{
 					end = RandomCoord(rand, maze);
 				}
-				solver.Reset(start, end);
-				generator.Reset(maze, RandomCoord(rand, maze));
+				solver.NewMaze(start, end, maze.Width() * maze.Height() / 2);
+				//solver.Reset(start, end);
 			}
 		}
 	
 		maze.Render(win, 0, 0, 800, 800);
-		
+
 		win.Display();
 	}
 	return 0;

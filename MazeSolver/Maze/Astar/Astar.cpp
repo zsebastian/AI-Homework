@@ -15,8 +15,8 @@ bool Astar::Step(Maze& maze)
 	if (steps_ == 0)
 	{
 		came_from_ = Maze(maze.Width(), maze.Height());
-		maze(start_.x, start_.y).color = Color::red();
-		maze(end_.x, end_.y).color = Color::green();
+		maze(start_.x, start_.y).color = Color::green();
+		maze(end_.x, end_.y).color = Color::red();
 
 		Reset();
 	}

@@ -32,3 +32,8 @@ std::string Formatter::to_string()
 {
 	return ss_.str();
 }
+
+void Formatter::clear()
+{
+	ss_.clear();
+}

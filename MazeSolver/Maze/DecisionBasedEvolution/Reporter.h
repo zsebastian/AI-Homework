@@ -17,7 +17,7 @@ public:
 	virtual ~Reporter() {};
 	virtual bool evaluate(Maze& maze, Coord current_coord, Decision decision) = 0;
 	virtual ptr clone() = 0;
-	virtual std::string to_string() const;
+	virtual std::string to_string() const = 0;
 protected:
 	bool evaluate_helper(Maze& maze, Coord current_coord, Decision decision);
 };

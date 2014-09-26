@@ -23,11 +23,12 @@ public:
 
 	virtual Decision evaluate(Maze& maze, Coord current_coord, Decision current_decision) = 0;
 	virtual Node::ptr clone() = 0;
-	virtual void mutate(Randomizer& random) = 0;
+	virtual void mutate(Randomizer& random, int depth) = 0;
 	virtual Node::ptr select_node(Randomizer& random) = 0;
 	virtual void replace(Node::ptr& from, Node::ptr& to) = 0;
 	virtual void format(Formatter& format) = 0;
-		
+	virtual int max_depth() = 0;
+
 	Node::ptr get_this();
 protected:
 	Node() {};

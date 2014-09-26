@@ -24,9 +24,11 @@ public:
 	Decision evaluate(Maze& maze, Coord current_coord, Decision current_decision) override;
 	Node::ptr clone() override;
 	Node::ptr select_node(Randomizer& random) override;
-	void mutate(Randomizer& random) override;
+	void mutate(Randomizer& random, int depth) override;
 	void replace(Node::ptr& from, Node::ptr& to) override;
 	void format(Formatter& format) override;
+	int max_depth() override;
+
 private:
 
 	std::vector<Node::ptr> children_;

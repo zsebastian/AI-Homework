@@ -11,16 +11,24 @@ Node::ptr Node::get_this()
 
 Node::ptr Node::make_random(Randomizer& random)
 {
-	int r = random.NextInt(0, 2);
+	int r = random.NextInt(0, 5);
 	switch (r)
 	{
 	case 0:
-		return CodeBlock::make();
-	case 1:
 		return ControlBlock::make();
+	case 1:
+		return CodeBlock::make();
 	case 2:
+		return CodeBlock::make();
+	case 3:
+		return Command::make(Command::BLANK);
+	case 4:
+		return Command::make(Command::BLANK);
+	case 5:
 		return Command::make(Command::BLANK);
 	default:
-		break;
+
+		//supress warning
+		return nullptr;
 	}
 }

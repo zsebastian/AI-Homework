@@ -23,6 +23,7 @@ int CodeTurtle::step(Maze& maze)
 
 void CodeTurtle::set_start_position(Coord coord)
 {
+	current_decision_ = Decision();
 	steps_ = 0;
 	current_coord_ = coord;
 }

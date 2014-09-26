@@ -77,3 +77,23 @@ bool TrueReporter::evaluate(Maze& maze, Coord current_coord, Decision decision)
 {
 	return true;
 }
+
+std::string WallAhead::to_string() const
+{
+	return "wall_ahead";
+}
+
+std::string WallLeft::to_string() const
+{
+	return "wall_left";
+}
+
+std::string WallRight::to_string() const
+{
+	return "wall_right";
+}
+
+std::string TrueReporter::to_string() const
+{
+	return "true";
+}

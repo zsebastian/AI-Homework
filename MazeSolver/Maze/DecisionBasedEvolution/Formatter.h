@@ -11,6 +11,7 @@ public:
 	void pop_indent();
 
 	std::string to_string();
+	void clear();
 private:
 	std::stringstream ss_;
 	int indent_;

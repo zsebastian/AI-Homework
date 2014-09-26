@@ -55,22 +55,24 @@ Node::ptr ControlBlock::clone()
 	return std::move(copy);
 }
 
-void ControlBlock::mutate(Randomizer& random)
+void ControlBlock::mutate(Randomizer& random, int depth)
 {
 	//half the time randomize the reporter
-	if (random.NextInt(0, 1) == 0)
+	if (random.NextInt(0, 1) == 0 || dynamic_cast<TrueReporter*>(reporter_.get()) != nullptr)
 	{
 		reporter_ = Reporter::make(random);
 	}
 	//half the time randomize the if
 	if (random.NextInt(0, 1) == 0)
 	{
-		//half the time randomize a type
 		if (random.NextInt(0, 1) == 0)
 		{
 			if_ = Node::make_random(random);
 		}
-		if_->mutate(random);
+		if (depth > 0)
+		{
+			if_->mutate(random, depth - 1);
+		}
 	}
 	//half the time randomize the else
 	if (random.NextInt(0, 1) == 0)
@@ -80,7 +82,10 @@ void ControlBlock::mutate(Randomizer& random)
 		{
 			else_ = Node::make_random(random);
 		}
-		else_->mutate(random);;
+		if (depth > 0)
+		{
+			else_->mutate(random, depth);
+		}
 	}
 }
 
@@ -89,7 +94,6 @@ void ControlBlock::replace(Node::ptr& from, Node::ptr& to)
 	//can't replace self
 	if (this != from.get())
 	{
-
 		if (if_ == from)
 		{
 			if_ = to;
@@ -109,7 +113,7 @@ void ControlBlock::replace(Node::ptr& from, Node::ptr& to)
 
 void ControlBlock::format(Formatter& format)
 {
-	format.append("if (" + reporter_.to_string() + ")");
+	format.append("if (" + reporter_->to_string() + "?)");
 	format.push_indent();
 	if_->format(format);
 	format.pop_indent();
@@ -117,5 +121,9 @@ void ControlBlock::format(Formatter& format)
 	format.push_indent();
 	else_->format(format);
 	format.pop_indent();
+}
 
+int ControlBlock::max_depth()
+{
+	return std::max(else_->max_depth(), if_->max_depth()) + 1;
 }
