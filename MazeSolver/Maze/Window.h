@@ -18,6 +18,9 @@ public:
 	bool Open() const;
 	void PollEvents();
 	void Display();
+	void Clear();
+	void PrintScreen(const std::string& file);
+
 	void RenderRectangle(int x, int y, int w, int h, Color color);
 
 	void MapKey(SDL_Keycode sym, std::string str);
@@ -33,9 +36,8 @@ public:
 	void RenderSurface(SDL_Surface* surface, int x, int y, int w, int h);
 
 private:
-
 	void DrawRectangle(SDL_Surface *surface, int w, int h, Uint32 pixel);
-
+	bool saveScreenshotBMP(std::string filepath, SDL_Window* SDLWindow, SDL_Renderer* SDLRenderer);
 	void HandleEvent(SDL_Event&);
 	
 	int width_;

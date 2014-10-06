@@ -1,16 +1,9 @@
-﻿Build started 2014-09-26 14:09:39.
+﻿Build started 2014-10-03 16:04:36.
      1>Project "C:\Users\Sebe\Documents\GitHub\AI\MazeSolver\Maze\Maze.vcxproj" on node 2 (Build target(s)).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (AStar.vcxproj, MazeSolver.vcxproj).  This can lead to incorrect clean and rebuild behavior.
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DecisionBasedEvolution\DecisionEvolver.cpp main.cpp
-         DecisionEvolver.cpp
-     1>c:\users\sebe\documents\github\ai\mazesolver\maze\Color.h(279): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\sebe\documents\github\ai\mazesolver\maze\Color.h(287): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>DecisionBasedEvolution\DecisionEvolver.cpp(21): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>DecisionBasedEvolution\DecisionEvolver.cpp(44): warning C4018: '<' : signed/unsigned mismatch
-     1>DecisionBasedEvolution\DecisionEvolver.cpp(67): warning C4018: '<' : signed/unsigned mismatch
-     1>DecisionBasedEvolution\DecisionEvolver.cpp(117): warning C4018: '<' : signed/unsigned mismatch
-         main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Window.cpp
+         Window.cpp
      1>c:\users\sebe\documents\github\ai\mazesolver\maze\Color.h(279): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
      1>c:\users\sebe\documents\github\ai\mazesolver\maze\Color.h(287): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
        Link:
@@ -39,4 +32,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.99
+Time Elapsed 00:00:02.61
