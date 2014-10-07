@@ -222,17 +222,17 @@ public:
 		return do_operation(*this, other, other.op);
 	}
 
-	Color add(const Color& c0, const Color& c1)
+	static Color add(const Color& c0, const Color& c1)
 	{
 		return do_operation(c0, c1, add_op);
 	}
 
-	Color subtract(const Color& c0, const Color& c1)
+	static Color subtract(const Color& c0, const Color& c1)
 	{
 		return do_operation(c0, c1, subtract_op);
 	}
 
-	Color multiply(const Color& c0, const Color& c1)
+	static Color multiply(const Color& c0, const Color& c1)
 	{
 		return do_operation(c0, c1, multiply_op);
 	}

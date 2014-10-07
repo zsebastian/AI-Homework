@@ -35,6 +35,9 @@ public:
 
 	void RenderSurface(SDL_Surface* surface, int x, int y, int w, int h);
 
+	int Heigth() const { return height_; }
+	int Width() const { return width_; }
+
 private:
 	void DrawRectangle(SDL_Surface *surface, int w, int h, Uint32 pixel);
 	bool saveScreenshotBMP(std::string filepath, SDL_Window* SDLWindow, SDL_Renderer* SDLRenderer);
