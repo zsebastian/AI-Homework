@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Cat.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Coord.h" />
     <ClInclude Include="Key.h" />
@@ -96,6 +97,7 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Cat.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="StateMachine.cpp" />

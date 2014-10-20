@@ -2,20 +2,32 @@
 #include "Timer.h"
 #include "Mouse.h"
 #include "World.h"
+#include "Cat.h"
 
 int main(int argc, char **argv)
 {
-	World world(800, 800);
-	Mouse mouse(world, 50.f, 50.f);
+	std::vector<Cat> cats;
+	//can't move cats around in memory, due to world essentially saving their pointers
+	//given the lambdas.
+	cats.reserve(5);
 
 	std::random_device rd;
 	std::mt19937 random_engine(rd());
 	std::uniform_real_distribution<float> dist(0, 800.f);
-	for (int i = 0; i < 50; ++i)
+
+	World world(800, 800);
+	Mouse mouse(world, 50.f, 50.f);
+
+	for (int i = 0; i < 5; ++i)
+	{
+		cats.emplace_back(world, dist(random_engine), dist(random_engine));
+	}
+
+	for (int i = 0; i < 5; ++i)
 	{
 		float x = dist(random_engine);
 		float y = dist(random_engine);
-		Rect cheese(x, y, 10.f, Color::green());
+		Rect cheese(x, y, 10.f, Color::make_from_floats(1.f, 1.f, 0.f));
 		world.add_object("cheese", [](float dt){}, [cheese]() {return cheese; });
 	}
 

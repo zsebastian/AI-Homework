@@ -31,6 +31,23 @@ void Wanderer::force_target(const Rect& rect, float x, float y)
 	wander_len_ = 0.f;
 }
 
+void Wanderer::force_reverse_target(const Rect& rect, float x, float y)
+{
+	has_target_ = true;
+	
+	start_x_ = rect.center_x();
+	start_y_ = rect.center_y();
+
+	target_x_ = start_x_ - x;
+	target_y_ = start_y_ - y;
+	
+	x = target_x_ - start_x_;
+	y = target_y_ - start_y_;
+	float len = std::sqrtf((x * x) + (y * y));
+	target_wander_len_ = len;
+	wander_len_ = 0.f;
+}
+
 void Wanderer::wander(Rect& rect, float dt, float speed)
 {
 	if (!has_target_)

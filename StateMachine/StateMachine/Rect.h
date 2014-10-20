@@ -42,6 +42,14 @@ public:
 	{
 		return color_;
 	}
+
+	/* because lazy */
+	bool circular_collision(const Rect& other) const
+	{
+		float extends = other.extends() + extends_;
+		return distance_to(other) < extends;
+	}
+
 public:
 	float cx_, cy_, extends_;
 	Color color_;

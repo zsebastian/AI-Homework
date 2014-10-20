@@ -12,6 +12,7 @@ public:
 	void wander(Rect& rect, float dt, float speed);
 	void reset();
 	void force_target(const Rect& rect, float x, float y);
+	void force_reverse_target(const Rect& rect, float x, float y);
 private:
 	float target_x_, target_y_;
 	float start_x_, start_y_;
