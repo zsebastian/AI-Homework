@@ -332,7 +332,7 @@ const Piece& Board::get_current_piece() const
 
 const Piece& Board::get_next_piece(int i)
 {
-	while (next_piece_queue_.size()  <= i)
+	while (static_cast<int>(next_piece_queue_.size()) <= i)
 	{
 		next_piece_queue_.push_back(random_piece());
 	}

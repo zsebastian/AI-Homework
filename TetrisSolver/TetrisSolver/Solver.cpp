@@ -1,20 +1,39 @@
 #include "Solver.h"
 #include "EvaluationFunctions.h"
 
+Solver::Solver(std::vector<std::pair<evaluation_function, double>> evaluations)
+	:current_piece_count_(-1)
+	, level_(0)
+	, score_(0.f)
+	, running_(true)
+	, lines_cleared_this_level_(0)
+{
+	evaluations_ = std::move(evaluations);
+}
+
 Solver::Solver()
 	:current_piece_count_(-1)
+	, level_(0)
+	, score_(0.f)
+	, running_(true)
+	, lines_cleared_this_level_(0)
 {
-	evaluations_.emplace_back(EvaluationFunction<0>(), EvaluationFunction<0>::weight());
-	evaluations_.emplace_back(EvaluationFunction<1>(), EvaluationFunction<1>::weight());
-	evaluations_.emplace_back(EvaluationFunction<2>(), EvaluationFunction<2>::weight());
-	evaluations_.emplace_back(EvaluationFunction<3>(), EvaluationFunction<3>::weight());
-	evaluations_.emplace_back(EvaluationFunction<4>(), EvaluationFunction<4>::weight());
-	evaluations_.emplace_back(EvaluationFunction<5>(), EvaluationFunction<5>::weight());
-	evaluations_.emplace_back(EvaluationFunction<6>(), EvaluationFunction<6>::weight());
+	evaluations_.emplace_back(EvaluationFunction<0>(), 1.0f);
+	evaluations_.emplace_back(EvaluationFunction<1>(), 1.0f);
+	evaluations_.emplace_back(EvaluationFunction<2>(), 1.0f);
+	evaluations_.emplace_back(EvaluationFunction<3>(), 1.0f);
+	evaluations_.emplace_back(EvaluationFunction<4>(), 1.0f);
+	evaluations_.emplace_back(EvaluationFunction<5>(), 1.0f);
+	evaluations_.emplace_back(EvaluationFunction<6>(), 1.0f);
 }
 
 void Solver::update(Board& board)
 {
+	if (running_ == false)
+	{
+		return;
+	}
+
 	if (board.get_piece_count() != current_piece_count_)
 	{
 		auto& current_piece = board.get_current_piece();
@@ -28,11 +47,21 @@ void Solver::update(Board& board)
 	play_recorded_actions(board);
 }
 
+bool Solver::is_done() const
+{
+	return !running_;
+}
+
+double Solver::get_score() const
+{
+	return score_;
+}
+
 void Solver::play_recorded_actions(Board& board)
 {
 	if (action_recording_.size() == 0)
 	{
-		board.tick();
+		handle_tick(board.tick());
 		return;
 	}
 	else
@@ -40,7 +69,7 @@ void Solver::play_recorded_actions(Board& board)
 		auto& top_frame = action_recording_.front();
 		if (top_frame.size() == 0)
 		{
-			board.tick();
+			handle_tick(board.tick());
 			action_recording_.pop_front();
 		}
 		else
@@ -68,7 +97,7 @@ void Solver::start_search(Board& board)
 	action_recording_ = std::move(make_recording(best, start));
 }
 
-State::ptr Solver::search(StateArray& states, PlayField& original_play_field, PlayField& play_field, int depth, const std::vector<Piece>& piece_queue, const std::vector<Piece>& locked_pieces)
+State::ptr Solver::search(StateArray& states, PlayField& original_play_field, PlayField& play_field, int depth, const std::vector<Piece>& piece_queue, std::vector<Piece>& locked_pieces)
 {
 	if (depth == piece_queue.size())
 	{
@@ -108,20 +137,20 @@ State::ptr Solver::search(StateArray& states, PlayField& original_play_field, Pl
 		{
 			PlayField next_play_field = play_field;
 			next_play_field.imprint(current);
-			std::vector<Piece> locked = locked_pieces;
-			locked.push_back(current);
+			locked_pieces.push_back(current);
+			State::ptr next_search = search(states, original_play_field, next_play_field, depth + 1, piece_queue, locked_pieces);
 
-			State::ptr next_search = search(states, original_play_field, next_play_field, depth + 1, piece_queue, locked);
 			if (next_search == nullptr)
 			{
 				
-				double eval = evaluate_play_field(original_play_field, next_play_field, locked);
+				double eval = evaluate_play_field(original_play_field, next_play_field, locked_pieces);
 				if (best_state == nullptr || best_state_value > eval)
 				{
 					best_state = states[current.get_x()][current.get_y()][current.get_rotation()][depth];
 					best_state_value = eval;
 				}
 			}
+			locked_pieces.pop_back();
 		}
 	}
 	return best_state;
@@ -185,11 +214,44 @@ bool Solver::add_state_to_queue(StateArray& states, StateQueue& queue, State::pt
 double Solver::evaluate_play_field(const PlayField& from, const PlayField& to, const std::vector<Piece>& piece_queue) const
 {
 	double total = 0;
-	for (auto& eval : evaluations_)
+	for (auto& p: evaluations_)
 	{
-		total += eval.first(from, to, piece_queue) * eval.second;
+		total += p.first(from, to, piece_queue) * p.second;
 	}
 	return total;
+}
+
+void Solver::handle_tick(int tick)
+{
+	if (tick == -1)
+	{
+		running_ = false;
+	}
+
+	double score_multiplier = 0.f;
+	if (tick == 1)
+	{
+		score_multiplier = 0.1f;
+	}
+	else if (tick == 2)
+	{
+		score_multiplier = 0.3f;
+	}
+	else if (tick == 3)
+	{
+		score_multiplier = 0.6f;
+	}
+	else if (tick >= 4)
+	{
+		score_multiplier = 1.0f;
+	}
+	lines_cleared_this_level_ += tick;
+	if (lines_cleared_this_level_ >= 10)
+	{
+		level_++;
+		lines_cleared_this_level_ -= 10;
+	}
+	score_ += score_multiplier * (level_ + 1);
 }
 
 Solver::Recording Solver::make_recording(State::ptr state, State::ptr start) const

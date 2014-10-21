@@ -33,6 +33,15 @@
     <ClCompile Include="PlayField.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EvaluationSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SolverEvolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -69,6 +78,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EvaluationFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EvaluationSettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SolverEvolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="picojson.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

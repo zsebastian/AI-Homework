@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PlayField.h"
+#include "EvaluationSettings.h"
 
 template<int ID>
 struct EvaluationFunction
@@ -19,31 +20,26 @@ struct EvaluationFunction<0>
 		int lines_cleared = from.get_cleared_rows() - to.get_cleared_rows();
 		if (lines_cleared == 0)
 		{
-			return -1.0f;
+			return 0.f;
 		}
 		else if (lines_cleared == 1)
 		{
-			return 0.5f;
+			return 0.1f;
 		}
 		else if (lines_cleared == 2)
 		{
-			return 1.5f;
+			return 0.3f;
 		}
 		else if (lines_cleared == 3)
 		{
-			return 4.0f;
+			return 0.6f;
 		}
 		else if (lines_cleared >= 4)
 		{
-			return 8.0f;
+			return 1.0f;
 		}
 		return static_cast<double>(from.get_cleared_rows() - to.get_cleared_rows());
 	};
-	
-	static double weight()
-	{
-		return -4.0f;
-	}
 };
 
 template<>
@@ -81,11 +77,6 @@ struct EvaluationFunction < 1 >
 			}
 		}
 		return (height - lowest_y) + 1;
-	}
-
-	static double weight()
-	{
-		return 12.885008263218383;
 	}
 };
 
@@ -131,12 +122,6 @@ struct EvaluationFunction<2>
 		}
 		return static_cast<double>(wall_cells);
 	};
-
-
-	static double weight()
-	{
-		return 15.842707182438396;
-	}
 };
 
 
@@ -164,12 +149,6 @@ struct EvaluationFunction<3>
 		}
 		return static_cast<double>(holes);
 	};
-
-
-	static double weight()
-	{
-		return 26.894496507795950;
-	}
 };
 
 
@@ -199,11 +178,6 @@ struct EvaluationFunction<4>
 		return static_cast<double>(transitions);
 	};
 
-
-	static double weight()
-	{
-		return 27.616914062397015;
-	}
 };
 
 template<>
@@ -242,12 +216,6 @@ struct EvaluationFunction<5>
 		}
 		return static_cast<double>(transitions);
 	};
-
-
-	static double weight()
-	{
-		return 27.616914062397015;
-	}
 };
 
 template<>
@@ -275,10 +243,4 @@ struct EvaluationFunction<6>
 		}
 		return static_cast<double>(pile_height);
 	};
-
-
-	static double weight()
-	{
-		return 20.0000000000000;
-	}
 };

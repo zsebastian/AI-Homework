@@ -83,21 +83,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="EvaluationSettings.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="PlayField.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="Solver.cpp" />
+    <ClCompile Include="SolverEvolver.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="EvaluationFunctions.h" />
+    <ClInclude Include="EvaluationSettings.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="MultiArray.h" />
+    <ClInclude Include="picojson.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="PlayField.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Solver.h" />
+    <ClInclude Include="SolverEvolver.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateQueue.h" />
     <ClInclude Include="Timer.h" />

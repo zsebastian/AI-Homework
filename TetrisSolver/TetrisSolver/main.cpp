@@ -2,19 +2,19 @@
 #include "Window.h"
 #include "Board.h"
 #include "Timer.h"
-#include "Solver.h"
+#include "SolverEvolver.h"
 
 int handle_input(Board&, Window&);
 
 int main(int argc, char *argv[])
 {
-	Window win("Tetris!", 800, 600);
+	Window win("Tetris!", 5 * 16 * 12, 2 * 16 * 22);
 	win.MapKey(SDLK_UP, "up");
 	win.MapKey(SDLK_DOWN, "down");
 	win.MapKey(SDLK_LEFT, "left");
 	win.MapKey(SDLK_RIGHT, "right");
-	Board board(0, 0, 16);
-	Solver solver;
+
+	SolverEvolver solver(10, 0.5f, 0.01f);
 
 	float rot = 0.0f;
 
@@ -39,8 +39,7 @@ int main(int argc, char *argv[])
 			}
 			timer.Start();
 		}*/
-		solver.update(board);
-		board.render(win);
+		solver.update(win);
 
 		win.Display();
 	}
