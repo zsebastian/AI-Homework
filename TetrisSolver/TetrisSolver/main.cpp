@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 	win.MapKey(SDLK_LEFT, "left");
 	win.MapKey(SDLK_RIGHT, "right");
 
-	SolverEvolver solver(10, 0.5f, 0.01f);
+	SolverEvolver solver(10, 0.5f, 0.05f);
 
 	float rot = 0.0f;
 

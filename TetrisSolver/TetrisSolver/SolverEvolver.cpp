@@ -54,7 +54,7 @@ SolverEvolver::Genome SolverEvolver::random_genome()
 
 double SolverEvolver::random_double(double middle)
 {
-	return rand_.NextDouble(middle - 50.f, middle + 50.f);
+	return rand_.NextDouble(middle - 10.f, middle + 10.f);
 }
 
 void SolverEvolver::update(Window& window)
@@ -67,7 +67,6 @@ void SolverEvolver::update(Window& window)
 			no_update = false;
 			p.solver->update(*p.board);
 			p.board->render(window);
-			break;
 		}
 	}
 	if (no_update)
