@@ -41,4 +41,5 @@ private:
 
 	int population_size_;
 	float combination_p_, mutation_p_;
+	int steps_;
 };

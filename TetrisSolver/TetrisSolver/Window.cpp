@@ -7,7 +7,7 @@
 
 Window::Window(const std::string& title, int w, int h)
 {
-	
+
 	open_ = false;
 	if (!SDL_Init(SDL_INIT_EVERYTHING))
 	{
@@ -42,6 +42,11 @@ void Window::Exit()
 void Window::PollEvents()
 {
 	SDL_Event ev;
+	for (auto& key : keys_)
+	{
+		key.second.pressed = false;
+		key.second.released = false;
+	}
 	while (SDL_PollEvent(&ev))
 	{
 		HandleEvent(ev);
@@ -51,14 +56,60 @@ void Window::PollEvents()
 void Window::Display()
 {
 	SDL_RenderPresent(renderer_);
+}
+
+void Window::Clear()
+{
 	SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 0);
 	SDL_RenderClear(renderer_);
-	for (auto& key : keys_)
+}
+
+void Window::PrintScreen(const std::string& file)
+{
+	if (!saveScreenshotBMP(file, win_, renderer_))
 	{
-		key.second.pressed = false;
-		key.second.released = false;
+		std::cout << "Error when printing screen" << std::endl;
 	}
 }
+
+bool Window::saveScreenshotBMP(std::string filepath, SDL_Window* SDLWindow, SDL_Renderer* SDLRenderer)
+{
+	SDL_Surface* saveSurface = NULL;
+	SDL_Surface* infoSurface = NULL;
+	infoSurface = SDL_GetWindowSurface(SDLWindow);
+	if (infoSurface == NULL) {
+		std::cerr << "Failed to create info surface from window in saveScreenshotBMP(string), SDL_GetError() - " << SDL_GetError() << "\n";
+	}
+	else {
+		unsigned char * pixels = new (std::nothrow) unsigned char[infoSurface->w * infoSurface->h * infoSurface->format->BytesPerPixel];
+		if (pixels == 0) {
+			std::cerr << "Unable to allocate memory for screenshot pixel data buffer!\n";
+			return false;
+		}
+		else {
+			if (SDL_RenderReadPixels(SDLRenderer, &infoSurface->clip_rect, infoSurface->format->format, pixels, infoSurface->w * infoSurface->format->BytesPerPixel) != 0) {
+				std::cerr << "Failed to read pixel data from SDL_Renderer object. SDL_GetError() - " << SDL_GetError() << "\n";
+				pixels = NULL;
+				return false;
+			}
+			else {
+				saveSurface = SDL_CreateRGBSurfaceFrom(pixels, infoSurface->w, infoSurface->h, infoSurface->format->BitsPerPixel, infoSurface->w * infoSurface->format->BytesPerPixel, infoSurface->format->Rmask, infoSurface->format->Gmask, infoSurface->format->Bmask, infoSurface->format->Amask);
+				if (saveSurface == NULL) {
+					std::cerr << "Couldn't create SDL_Surface from renderer pixel data. SDL_GetError() - " << SDL_GetError() << "\n";
+					return false;
+				}
+				SDL_SaveBMP(saveSurface, filepath.c_str());
+				SDL_FreeSurface(saveSurface);
+				saveSurface = NULL;
+			}
+			delete[] pixels;
+		}
+		SDL_FreeSurface(infoSurface);
+		infoSurface = NULL;
+	}
+	return true;
+}
+
 
 void Window::HandleEvent(SDL_Event& ev)
 {
@@ -71,25 +122,25 @@ void Window::HandleEvent(SDL_Event& ev)
 		}
 		break;
 	case SDL_KEYDOWN:
+	{
+		auto map = keymaps_.find(ev.key.keysym.sym);
+		if (map != keymaps_.end())
 		{
-			auto map = keymaps_.find(ev.key.keysym.sym);
-			if (map != keymaps_.end())
-			{
-				keys_[map->second].down = true;
-				keys_[map->second].pressed = true;
-			}
-			break;
+			keys_[map->second].down = true;
+			keys_[map->second].pressed = true;
 		}
+		break;
+	}
 	case SDL_KEYUP:
+	{
+		auto map = keymaps_.find(ev.key.keysym.sym);
+		if (map != keymaps_.end())
 		{
-			auto map = keymaps_.find(ev.key.keysym.sym);
-			if (map != keymaps_.end())
-			{
-				keys_[map->second].down = false;
-				keys_[map->second].released = true;
-			}
-			break;
+			keys_[map->second].down = false;
+			keys_[map->second].released = true;
 		}
+		break;
+	}
 	}
 }
 
@@ -119,7 +170,9 @@ void Window::RenderRectangle(int x, int y, int w, int h, Color color)
 	try
 	{
 		SDL_Surface* surface = NewSurface(w, h);
-		DrawRectangle(surface, w, h, ToPixel(color));
+
+		SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, color.get_red_byte(), color.get_green_byte(), color.get_blue_byte()));
+
 		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer_, surface);
 		SDL_FreeSurface(surface);
 		SDL_Rect target;
@@ -159,12 +212,12 @@ Uint32 Window::ToPixel(Color color)
 SDL_Surface* Window::NewSurface(int w, int h)
 {
 	/* Create a 32-bit surface with the bytes of each pixel in R,G,B,A order,
-		  as expected by OpenGL for textures */
+	as expected by OpenGL for textures */
 	SDL_Surface *surface;
 	Uint32 rmask, gmask, bmask, amask;
 
 	/* SDL interprets each pixel as a 32-bit number, so our masks must depend
-	   on the endianness (byte order) of the machine */
+	on the endianness (byte order) of the machine */
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	rmask = 0xff000000;
 	gmask = 0x00ff0000;
@@ -181,6 +234,14 @@ SDL_Surface* Window::NewSurface(int w, int h)
 		rmask, gmask, bmask, amask);
 
 	return surface;
+}
+
+void Window::DestroySurface(SDL_Surface* surface)
+{
+	if (surface != 0)
+	{
+		SDL_FreeSurface(surface);
+	}
 }
 
 /*
@@ -217,4 +278,16 @@ void Window::DrawRectangle(SDL_Surface *surface, int w, int h, Uint32 pixel)
 			set(i, j);
 		}
 	}
+}
+
+void Window::RenderSurface(SDL_Surface* surface, int x, int y, int w, int h)
+{
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer_, surface);
+	SDL_Rect target;
+	target.x = x;
+	target.y = y;
+	target.w = w;
+	target.h = h;
+	SDL_RenderCopy(renderer_, texture, nullptr, &target);
+	SDL_DestroyTexture(texture);
 }

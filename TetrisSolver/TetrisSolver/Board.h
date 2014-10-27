@@ -50,6 +50,7 @@ private:
 	void render_board(Window& window);
 	void render_tiles();
 	void render_live_piece();
+
 	void set_color(Color color, int x, int y);
 	void clear_colors();
 	bool imprint_live_piece();

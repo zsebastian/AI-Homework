@@ -7,6 +7,7 @@ SolverEvolver::SolverEvolver(int population_size, double combination_probability
 	:population_size_(population_size)
 	, combination_p_(combination_probability)
 	, mutation_p_(mutation_probability)
+	, steps_(0)
 {
 	std::ifstream file("population.json");
 	picojson::value v;
@@ -69,6 +70,9 @@ void SolverEvolver::update(Window& window)
 			p.board->render(window);
 		}
 	}
+	if (steps_ % 10 == 0)
+		window.PrintScreen("screen_" + std::to_string(steps_) + ".bmp");
+	++steps_;
 	if (no_update)
 	{
 		evolve();
