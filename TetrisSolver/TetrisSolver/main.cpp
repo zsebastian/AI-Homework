@@ -57,10 +57,6 @@ int main(int argc, char *argv[])
 
 	win.PrintScreen("Tetromins.bmp");
 	win.Display();
-	while (win.Open())
-	{
-		win.PollEvents();
-	}
 		
 	while (win.Open())
 	{

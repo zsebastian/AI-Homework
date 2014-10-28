@@ -70,7 +70,7 @@ void SolverEvolver::update(Window& window)
 			p.board->render(window);
 		}
 	}
-	if (steps_ % 10 == 0)
+	if (steps_ % 50 == 0)
 		window.PrintScreen("screen_" + std::to_string(steps_) + ".bmp");
 	++steps_;
 	if (no_update)

@@ -119,26 +119,6 @@ public:
 		return Colors_[alpha_i];
 	}
 
-	void set_red(float red_)
-	{
-		Colors_[red_i] = red_;
-	}
-
-	void set_green(float green_)
-	{
-		Colors_[green_i] = green_;
-	}
-
-	void set_blue(float blue_)
-	{
-		Colors_[blue_i] = blue_;
-	}
-
-	void set_alpha(float alpha_)
-	{
-		Colors_[alpha_i] = alpha_;
-	}
-
 	byte_t get_red_byte() const
 	{
 		return to_byte(Colors_[red_i]);
@@ -159,117 +139,8 @@ public:
 		return to_byte(Colors_[alpha_i]);
 	}
 
-	void set_red_byte(byte_t red_)
-	{
-		Colors_[red_i] = to_float(red_);
-	}
-
-	void set_green_byte(byte_t green_)
-	{
-		Colors_[green_i] = to_float(green_);
-	}
-
-	void set_blue_byte(byte_t blue_)
-	{
-		Colors_[blue_i] = to_float(blue_);
-	}
-
-	void set_alpha_byte(byte_t alpha_)
-	{
-		Colors_[alpha_i] = to_float(alpha_);
-	}
-
-	/*	set the operation to be performed when apply is 
-	 *	called with this Color as an argument.
-	 *	this sets the operation to add.
-	 */
-	void add()
-	{
-		op = add_op;
-	}
-
-	/*	set the operation to be performed when apply is
-	*	called with this Color as an argument.
-	*	this sets the operation to subtract.
-	*/
-	void subtract()
-	{
-		op = subtract_op;
-	}
-
-	/*	set the operation to be performed when apply is
-	*	called with this Color as an argument.
-	*	this sets the operation to multiply.
-	*/
-	void multiply()
-	{
-		op = multiply_op;
-	}
-
-	/*	Usage:
-	 *		Color c = Color::white();
-	 *		c = apply(Color::black().subtract());
-	 *		
-	 *	Will give the same result as:
-	 *		Color c = Color::white();
-	 *		Color result = c.add(Color().subtract());
-	 *		c = result;
-	 *	Note that the second line doesn't change object c,
-	 *	c is modified first when result is assigned to it.
-	 */
-	Color apply(Color& other) const
-	{
-		return do_operation(*this, other, other.op);
-	}
-
-	Color add(const Color& c0, const Color& c1)
-	{
-		return do_operation(c0, c1, add_op);
-	}
-
-	Color subtract(const Color& c0, const Color& c1)
-	{
-		return do_operation(c0, c1, subtract_op);
-	}
-
-	Color multiply(const Color& c0, const Color& c1)
-	{
-		return do_operation(c0, c1, multiply_op);
-	}
 private:
 	enum Color_operator {add_op, subtract_op, multiply_op};
-
-	static Color do_operation(const Color& a, const Color& b, Color_operator op)
-	{
-		Color ret;
-
-		switch (op)
-		{
-		case add_op:
-			for (int i = 0; i < 4; ++i)
-			{
-				ret.Colors_[i] = a.Colors_[i] + b.Colors_[i];
-			}
-			break;
-		case subtract_op:
-			for (int i = 0; i < 4; ++i)
-			{
-				ret.Colors_[i] = a.Colors_[i] - b.Colors_[i];
-			}
-			break;
-		case multiply_op:
-			for (int i = 0; i < 4; ++i)
-			{
-				ret.Colors_[i] = a.Colors_[i] * b.Colors_[i];
-			}
-			break;
-		default:
-			break;
-		}
-
-		return ret;
-	}
-
 	enum Color_index { red_i, green_i, blue_i, alpha_i };
 	std::array<float, 4U> Colors_;
 	Color_operator op;
