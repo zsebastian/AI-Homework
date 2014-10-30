@@ -25,6 +25,21 @@ int main(int argc, char *argv[])
 	return decision_based_main();
 }
 
+void print_maze(int w, int h, const std::string& filename, Window& win)
+{
+	std::random_device rd;
+	Randomizer rand(rd());
+
+	Maze maze(w, h);
+	PrimGenerator generator(RandomCoord(rand, maze));
+	while (generator.Step(maze));
+	win.Clear();
+	maze.Render(win, 0, 0, 800, 800);
+	win.Display();
+	win.PrintScreen(filename);
+	win.Clear();
+}
+
 int astar_main()
 {
 	Window win("Maze solver!", 800, 800);
@@ -83,6 +98,7 @@ int decision_based_main()
 
 	std::random_device rd;
 	Randomizer rand(rd());
+	print_maze(100, 100, "maze.bmp", win);
 
 	Coord start, end;
 	Maze maze(11, 11);
