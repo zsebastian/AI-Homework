@@ -40,14 +40,25 @@ int main(int argc, char *argv[])
 	purple.set_blue(1);
 
 	Window win("Self Organizing Map", 400, 400);
-	Controller c(20, 20, { red, green, blue, yellow, orange, purple, dark_green, dark_blue });
-
+	Controller c(400, 400, { red, green, blue, yellow, orange, purple, dark_green, dark_blue });
+	win.RenderRectangle(48 * 0, 0, 32, 32, red);
+	win.RenderRectangle(48 * 1, 0, 32, 32, green);
+	win.RenderRectangle(48 * 2, 0, 32, 32, blue);
+	win.RenderRectangle(48 * 3, 0, 32, 32, yellow);
+	win.RenderRectangle(48 * 4, 0, 32, 32, orange);
+	win.RenderRectangle(48 * 5, 0, 32, 32, purple);
+	win.RenderRectangle(48 * 6, 0, 32, 32, dark_green);
+	win.RenderRectangle(48 * 7, 0, 32, 32, dark_blue);
+	win.PrintScreen("colors.bmp");
+	int steps = 0;
 	while (win.Open())
 	{
 		win.PollEvents();
 		c.train();
 		c.render(win);
+		win.PrintScreen("screen_" + std::to_string(steps++) + ".bmp");
 		win.Display();
+
 		win.Clear();
 	}
 	return 0;

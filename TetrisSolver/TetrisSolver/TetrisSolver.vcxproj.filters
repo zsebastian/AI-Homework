@@ -33,9 +33,6 @@
     <ClCompile Include="PlayField.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EvaluationSettings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SolverEvolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -78,9 +75,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EvaluationFunctions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EvaluationSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SolverEvolver.h">

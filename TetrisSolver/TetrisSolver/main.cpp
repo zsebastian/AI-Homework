@@ -55,8 +55,7 @@ int main(int argc, char *argv[])
 		render_piece(p, win);
 	}
 
-	win.PrintScreen("Tetromins.bmp");
-	win.Display();
+	win.PrintScreen("Tetrominos.bmp");
 		
 	while (win.Open())
 	{
@@ -75,8 +74,8 @@ int main(int argc, char *argv[])
 			}
 			timer.Start();
 		}*/
-		solver.update(win);
 
+		solver.update(win);
 		win.Display();
 	
 	}

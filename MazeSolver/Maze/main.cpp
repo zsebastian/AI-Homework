@@ -22,7 +22,7 @@ Coord RandomCoord(Randomizer& r, Maze& maze)
 
 int main(int argc, char *argv[])
 {
-	return decision_based_main();
+	return astar_main();
 }
 
 void print_maze(int w, int h, const std::string& filename, Window& win)
@@ -48,7 +48,7 @@ int astar_main()
 	Randomizer rand(rd());
 
 	Coord start, end;
-	Maze maze(800, 800);
+	Maze maze(51, 51);
 	PrimGenerator generator(RandomCoord(rand, maze));
 
 	start = RandomCoord(rand, maze);
@@ -58,16 +58,19 @@ int astar_main()
 
 	Astar solver(start, end);
 
-	long long step = 0;
-	system("mkdir screens");
+	int step = 0;
+
 	while (win.Open())
 	{
 		win.PollEvents();
-	
+		bool generated = false;
+		bool solved = false;
 		if (!generator.Step(maze))
 		{
+			generated = true;
 			if (!solver.Step(maze))
 			{
+				solved = true;
 				std::cout << "SOLVED!" << std::endl;
 				maze = Maze(maze.Width() + 2, maze.Height() + 2);
 				generator.Reset(maze, RandomCoord(rand, maze));
@@ -81,11 +84,15 @@ int astar_main()
 
 			}
 		}
+	
+
 		maze.Render(win, 0, 0, 800, 800);
-
+	
 		win.Display();
-
-		step++;
+		if (generated && !solved)
+		{
+			win.PrintScreen("step_" + std::to_string(step++) + ".bmp");
+		}
 		win.Clear();
 
 	}

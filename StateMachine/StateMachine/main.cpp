@@ -36,7 +36,8 @@ int main(int argc, char **argv)
 	Timer timer;
 	timer.Start();
 	int last_update = timer.ElapsedMilliseconds();
-	
+	int last_screen_cap = timer.ElapsedMilliseconds() - 1000;
+	int step = 0;
 	while (window.Open())
 	{
 		window.PollEvents();
@@ -47,9 +48,15 @@ int main(int argc, char **argv)
 			float delta = (elapsed - last_update) / 1000.f;
 			last_update = elapsed;
 			world.update(delta);
-			
 		}
+
 		world.render(window);
+	
+		if (timer.ElapsedMilliseconds() >= last_screen_cap + 1000)
+		{
+			window.PrintScreen("screen_" + std::to_string(++step) + ".bmp");
+			last_screen_cap = timer.ElapsedMilliseconds();
+		}
 
 		window.Display();
 		window.Clear();

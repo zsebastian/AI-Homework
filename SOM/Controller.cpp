@@ -8,7 +8,7 @@ Controller::Controller(int map_width, int map_height, const std::vector<Color>& 
 	,map_radius_(std::max(map_width, map_height) / 2)
 	,iteration_count_(0)
 	,base_learning_rate_(0.1f)
-	,max_iterations_(10000)
+	,max_iterations_(1000)
 {
 	create_data_set(training_set);
 }

@@ -83,7 +83,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
-    <ClCompile Include="EvaluationSettings.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="PlayField.cpp" />
@@ -96,7 +95,6 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="EvaluationFunctions.h" />
-    <ClInclude Include="EvaluationSettings.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="MultiArray.h" />
     <ClInclude Include="picojson.h" />

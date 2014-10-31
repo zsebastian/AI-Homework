@@ -1,7 +1,6 @@
 #pragma once
 
 #include "PlayField.h"
-#include "EvaluationSettings.h"
 
 template<int ID>
 struct EvaluationFunction
@@ -43,7 +42,7 @@ struct EvaluationFunction<0>
 };
 
 template<>
-struct EvaluationFunction < 1 >
+struct EvaluationFunction<1>
 {
 	/* Total Lock Height
 		Lock height is the height above the playfield floor where a piece locked. 

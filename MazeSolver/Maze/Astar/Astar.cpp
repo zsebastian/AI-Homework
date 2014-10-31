@@ -19,6 +19,8 @@ bool Astar::Step(Maze& maze)
 		maze(end_.x, end_.y).color = Color::red();
 
 		Reset();
+		++steps_;
+		return true;
 	}
 	
 	++steps_;
